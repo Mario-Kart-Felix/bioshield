@@ -61,7 +61,7 @@ class ProjectGUI(BoxLayout):
 		# update filtered data plot
 		if num_filtered>0: # only draw filtered data if we've overfilled the buffer (prevent convolving too little data)
 			# convolve new data with filter
-			filtered = [np.dot(self.h_lp_icg,self.buff[-(i+1):-(i+1)-len(self.h_lp_icg):-1]) for i in range(num_filtered)][::-1]
+			filtered = [np.dot(self.h_60,self.buff[-(i+1):-(i+1)-len(self.h_lp_icg):-1]) for i in range(num_filtered)][::-1]
 			self.plots['filtered'].points = self.plots['filtered'].points+zip([(self.filt_iter+i)*self.scale for i in range(num_filtered)], filtered)
 			self.filt_iter += num_filtered
 			del self.buff[:num_filtered] # keep the buffer size limited to buffsize
