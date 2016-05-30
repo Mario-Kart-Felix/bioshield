@@ -3,6 +3,8 @@ from find_ports import serial_ports
 from Queue import Queue
 import time
 
+count = 0
+
 def ask_for_int(value, condition = lambda value: True):
 	try:
 		answer = int(raw_input("Enter {}: ".format(value)))
@@ -31,40 +33,53 @@ def connect_spp():
 
 class SPP(serial.Serial):
 	"""The Bluetooth Serial Port Profile (SPP) class."""
-	byte_buff = Queue(maxsize = 2)
-	data_buff = Queue(maxsize = 100000)
-	data_started = False
+	buff = {}
+	keys = ['ecg', 'icg_cardiac', 'icg_respiration', 'ppg']
+	for key in keys:
+		buff[key] = Queue(maxsize = 100000)
 
-	# def __init__(self, *args, **kwargs):
-	# 	super(SPP, self).__init__(*args, **kwargs)
+	def __init__(self, *args, **kwargs):
+		super(SPP, self).__init__(*args, **kwargs)
+		read = 0
+		start = time.time()
+		while read<50 or datum!=0:
+			if (time.time()-start)>3:
+				print "Did not read serial data from Bluetooth for 3 seconds... closing."
+				exit(0)
+			# read past the spp header data (about 20 bytes) and check for the data_begin byte
+			if self.inWaiting()>0:
+				datum = ord(self.read(1))
+				read += 1
 
 	def update_buffer(self, release = False, verbose = False):
-		num_bytes = self.inWaiting()
-		if num_bytes > 0:
-			data = self.read(num_bytes)
-			for datum in list(data):
-				if not self.data_started:
-					if ord(datum)==62:
-						self.data_started = True
-					continue
-				if self.byte_buff.full():
-					l1, l2 = self.byte_buff.get_nowait(), self.byte_buff.get_nowait()
-					value = (l1<<8|l2)*5/2.**10
-					if self.data_buff.full():
-						self.data_buff.get_nowait()
-					self.data_buff.put_nowait(value)
-					continue
-				self.byte_buff.put_nowait(ord(datum))
-				if verbose:
-					print ord(datum)
+		global count
+		num_packets = self.inWaiting()//9 # a packet is a group of 4 data points (2 bytes each) and a data_begin byte
+		if num_packets>0:
+			data = [ord(d) for d in self.read(num_packets*9)]
+			for i in range(num_packets):
+				packet = data[i*9:(i+1)*9]
+				count += 1
+				if count > 100:
+					print packet
+					count = 0
+				for j in range(4):
+					d1, d2 = packet[j*2], packet[j*2+1]
+					d1 = d1&ord('\x7f')
+					value = (d1<<8|d2)*5./2**10 # convert 10-bit data across 2 bytes to a voltage on [0,5)
+					key = self.keys[j]
+					if self.buff[key].full():
+						self.buff[key].get_nowait()
+					self.buff[key].put_nowait(value)
 		if release:
 			return self.release_data()
 
 	def release_data(self):
-		length = self.data_buff.qsize()
-		data = []
-		for _ in range(length):
-			data.append( self.data_buff.get_nowait() )
+		length = {key: self.buff[key].qsize() for key in self.buff}
+		data = {}
+		for key in self.buff:
+			data[key] = []
+			for _ in range(length[key]):
+				data[key].append( self.buff[key].get_nowait() )
 		return data
 
 	def get_data(self, dt = 1):
@@ -73,12 +88,15 @@ class SPP(serial.Serial):
 			self.update_buffer()
 
 	def print_data(self):
-		length = self.data_buff.qsize()
-		for _ in range(length):
-			sys.stdout.write( str(self.data_buff.get_nowait()) + ' ')
+		length = {key: self.buff[key].qsize() for key in self.buff}
+		for key in self.buff:
+			sys.stdout.write( key+': ' )
+			for _ in range(length[key]):
+				sys.stdout.write( str(self.buff[key].get_nowait()) + ' ')
 
 if __name__=='__main__':
 	spp = SPP('/dev/cu.AdafruitEZ-Link9dd8-SPP', 115200, timeout=1)
 	spp.get_data(1)
-	spp.print_data()
+	# spp.print_data()
+	# spp.plot_data()
 	spp.close()
