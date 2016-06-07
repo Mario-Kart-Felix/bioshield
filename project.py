@@ -1,5 +1,6 @@
 """
 Written by Rex Garland <rgarland@stanford.edu> on June 6th, 2016.
+Can be accessed at https://github.com/rexgarland/bioshield
 
 The bioshield GUI for live-plotting data sent over Bluetooth from the Arduino.
 

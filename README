@@ -1,4 +1,5 @@
 Bioshield GUI Installation Guide
+https://github.com/rexgarland/bioshield
 
 The bioshield software uses Kivy as its GUI framework. It requires scipy and numpy within its Kivy distribution of python. The following steps are used to install the necessary requirements on any platform that can run these dependencies.
 
