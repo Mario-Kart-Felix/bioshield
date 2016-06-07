@@ -73,12 +73,13 @@ class ProjectGUI(BoxLayout):
 		new_data = copy.deepcopy(self.spp.data)
 		self.spp.release_data()
 
-		# update raw data plots
+		# update raw data plot
 		self.plots['ecg'].points = self.plots['ecg'].points+zip([(self.iter+i)*self.scale for i in range(len(new_data['ecg']))], new_data['ecg'])
 		self.buff['ecg'] += new_data['ecg']
 		
 		self.iter += len(new_data['ecg'])
 
+		# FIR filter shown on second plot
 		if self.plot_filter:
 			num_filtered = len(self.buff['ecg'])-self.buffsize
 			# update filtered data plot
