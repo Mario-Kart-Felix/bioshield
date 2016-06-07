@@ -15,8 +15,9 @@ def createFilters():
     h_lp_icg = signal.firwin(numtaps, 1./f_nyquist)
     h_lp_ppg = signal.firwin(numtaps, 30./f_nyquist) # Can be used for ICG - cardiac
     h_60 = signal.firwin(numtaps, [55./f_nyquist, 65./f_nyquist])
+    h_hp = signal.firwin(numtaps, 5./f_nyquist, pass_zero=False)
 
-    return(h_lp_ecg, h_lp_icg, h_lp_ppg, h_60)
+    return(h_lp_ecg, h_lp_icg, h_lp_ppg, h_60, h_hp)
 
 def filterSignals(buff1, buff2, buff3, buff4, h_ecg, h_icg, h_ppg, h_60):
 
