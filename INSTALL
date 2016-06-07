@@ -1,0 +1,17 @@
+Bioshield GUI Installation Guide
+
+The bioshield software uses Kivy as its GUI framework. It requires scipy and numpy within its Kivy distribution of python. The following steps are used to install the necessary requirements on any platform that can run these dependencies.
+
+1. Install kivy on your machine. (e.g. on a Mac, install the Kivy app from https://kivy.org/)
+2. Install numpy and scipy within Kivy's python distribution. (e.g. on a Mac, type `kivy -m pip install numpy scipy` in terminal)
+3. Check that the installation works (e.g. type `kivy -c "import scipy, numpy"` in terminal)
+
+Next, follow these steps to start recieving data from the Arduino.
+
+1. Connect to the serial port corresponding to the BlueFruit bluetooth shield on the bioshield (make sure your bluetooth is turned on on your computer). 
+2. Change the variable `SERIAL_FILE` in project.py to reflect the file location of the serial port that appears as a result of step 1. It is set to `/dev/cu.AdafruitEZ-Link9dd8-SPP` by default. This is the default location for a Mac. For a PC it will be a com port (e.g. `COM4`).
+3. Run project.py within its folder.
+
+     >>> kivy project.py
+
+The resulting window should show two plots with the top plot actively showing Arduino's ADC readout at pin A0 by default. To add live filtering, change the boolean `plot_filter` in project.py. The filter `f` can be changed to one of the filters output from `createFilters()`.

@@ -19,6 +19,8 @@ from filters import *
 
 import copy
 
+SERIAL_FILE = '/dev/cu.AdafruitEZ-Link9dd8-SPP'
+
 class ProjectGUI(BoxLayout):
 	# channels = ['ecg', 'icg_cardiac', 'icg_respiration', 'ppg']
 	channels = ['ecg']
@@ -26,18 +28,18 @@ class ProjectGUI(BoxLayout):
 	graph2 = ObjectProperty(None)
 
 	# a serial port profile instance for communicating with the Arduino
-	spp = SPP(channels, '/dev/cu.AdafruitEZ-Link9dd8-SPP', 115200, timeout=1)
+	spp = SPP(channels, SERIAL_FILE, 115200, timeout=1)
 
 	h_lp_ecg, h_lp_icg, h_lp_ppg, h_60, h_hp = createFilters()
 
-	f = h_lp_icg
+	f = h_lp_icg # the filter selected for display
 
 	# "buffer" to keep track of data we've yet to filter
 	buff = {channel: [] for channel in channels}
 	# minimum buffer length for convolution
 	buffsize = 300 # once the buffer is filled to this length, it will be kept at this length after every update
 
-	plot_filter = True
+	plot_filter = False # change to show the filtered signal in the second plot
 
 	def __init__(self, *args, **kwargs):
 		super(ProjectGUI, self).__init__(*args, **kwargs)
