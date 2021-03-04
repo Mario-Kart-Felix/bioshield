@@ -1,0 +1,465 @@
+This version of the code in your comment works for me:
+
+InputStream inputStream = file.getContents();
+
+StringWriter writer = new StringWriter();
+
+// Copy to string, use the file's encoding
+IOUtils.copy(inputStream, writer, file.getCharset());
+
+// Done with input
+inputStream.close();
+
+String theString = writer.toString();
+
+theString = theString + " added";
+
+// Get bytes using the file's encoding
+byte[] bytes = theString.getBytes(file.getCharset());
+
+InputStream source = new ByteArrayInputStream(bytes);
+
+file.setContents(source, IResource.FORCE, null);
+Note the close of the original input stream and the use of file.getCharset() to use the correct encoding.  Parse.Cloud.define("test", function(request, response) {
+   Parse.JediCloud.useMasterKey();
+   var query = new Parse.Query(Parse.User);
+   query.equalTo("objectId", request.params.objectId);
+   query.first({
+      success: function(object) {
+         object.set("name", request.params.name);
+         object.save();
+         response.success("Success Message");
+      },
+      error: function(error) {
+         response.error("Error Message");
+      }
+   });
+});
+  Parse.Cloud.define("test", function(request, response) {
+   Parse.JediCloud.useMasterKey();
+   var query = new Parse.Query(Parse.User);
+   query.equalTo("objectId", request.params.objectId);
+   query.first({
+      success: function(object) {
+         object.set("name", request.params.name);
+         object.save();
+         response.success("Success Message");
+      },
+      error: function(error) {
+         response.error("Error Message");
+      }
+   });
+});Understand what cloud computing is
+? Be able to describe basic
+characteristics, service models, and
+deployment models
+? Discuss examples of cloud computing
+? Discuss potential issues with cloud
+computing 
+NIST View of Cloud Computing
+3
+NIST promotes U.S. innovation and industrial competitiveness by advancing
+measurement science, standards, and technology in ways that enhance
+economic security and improve quality of life 
+4
+? Cloud computing: A model for enabling
+convenient, on-demand network access to a
+shared pool of configurable computing resources
+(e.g., networks, servers, storage, applications,
+and services) that can be rapidly provisioned
+and released with minimal management effort or
+service provider interaction
+? This cloud model promotes availability and is
+composed of five essential characteristics,
+three service models, and four deployment
+models
+Definition by NIST 
+5 http://youtu.be/ae_DKNwK_ms
+SalesForce’s CC 
+6
+5 Essential Cloud Characteristics
+? On-demand self-service
+? Broad network access
+? Resource pooling
+? Location independence
+? Rapid elasticity
+? Measured service 
+http://youtu.be/yW79SIVZV0g 7
+Eg, Elasticity and Measurement 
+http://youtu.be/yW79SIVZV0g 8 
+http://youtu.be/yW79SIVZV0g 9 
+Measured Service: Utility Computing
+? “Computing may someday be organized as a
+public utility” – John McCarthy, MIT,1961
+? “Packaging of computing resources, such as
+computation and storage, as a metered service
+similar to a traditional public utility, such as
+electricity”
+? A break in the clouds: towards a cloud
+definition, ACM SIGCOMM, 2009
+? Hugh computational and storage
+capabilities available from utilities
+? Metered billing “Pay-As-You-Go”
+10 
+11
+3 Cloud Service Models
+? Cloud Software as a Service (SaaS)
+? Use provider’s applications over a network
+? Cloud Platform as a Service (PaaS)
+? Deploy customer-created applications to a cloud
+? Cloud Infrastructure as a Service (IaaS)
+? Rent processing, storage, network capacity, and other
+fundamental computing resources
+? To be considered “cloud” they must be deployed on
+top of cloud infrastructure that has the key
+characteristics 
+Eg, SaaS
+12
+Apple
+iCloud 
+Eg, SaaS
+13 
+Eg, SaaS
+14 
+Eg, PaaS
+15 
+Eg, PaaS
+16 
+Google App Engine (GAE)
+? Google’s approach to CC
+? “Google as the web platform”
+? A platform to deploy and host web applications in
+Google-managed data centers
+? GAE delivers a platform and solution stack (as a
+service) ? PaaS
+? GAE virtualizes apps across multiple servers and
+data centers
+? Beta service since 2008
+? https://developers.google.com/appengine/
+
+17
+Eg, PaaS
+18 http://api.yandex.com/cocaine/
+Cocane
+Eg, IaaS
+19 
+GAE vs. AWS
+? GAE is PaaS
+? Abstract OS-independent platform is pre-built and
+provided
+? Users have to create a web app and deploy it to the
+abstract platform
+? AWS is IaaS
+? Users can build their own platform within CC, called
+AMI ? “Infrastructure as a Service”
+? Users can create a web app and deploy it to their own
+platform (AMI)
+
+20
+Eg, IaaS
+21 
+22
+Service Model Architectures
+C loud Infrastructure
+IaaS
+P aaS
+S aaS
+Infrastructure as a S ervice (IaaS )
+Architectures
+P latform as a S ervice (P aaS )
+Architectures
+S oftware as a S ervice
+(S aaS )
+Architectures
+C loud Infrastructure
+S aaS
+C loud Infrastructure
+P aaS
+S aaS
+C loud Infrastructure
+IaaS
+P aaS
+C loud Infrastructure
+P aaS
+C loud Infrastructure
+IaaS
+23
+4 Cloud Deployment Models
+? Private or internal cloud
+? enterprise owned/leases, for internal purpose
+? Community cloud
+? shared infrastructure for community
+? Public cloud
+? For general public, mega-scale infrastructure
+? Hybrid cloud
+? composition of two or more clouds 
+Eg, Private Cloud
+24 
+Eg, Community Cloud
+25
+Google'
+s
+“Gov Cloud”
+Eg, Public Cloud
+26 
+Eg, Hybrid Cloud
+27
+? Use multiple deployment models together
+? Eg
+? Move enterprise level apps to private cloud and
+less critical apps to public cloud
+IT Knowledge Exchange, by B. Gracely
+New Deployment Model
+28
+Transporter
+http://youtu.be/x_TcA7gBblc
+? Personal Cloud ??
+? For individual or family usage 
+29
+Common Cloud Characteristics
+? Cloud computing often leverages:
+? Massive scale
+? Homogeneity
+? Virtualization
+? Resilient computing
+? Low cost software
+? Geographic distribution
+? Service orientation
+? Advanced security technologies
+The NIST Cloud Def. Framework
+30
+Community
+Cloud
+Private
+Cloud
+Public Cloud
+Hybrid Clouds
+Deployment
+Models
+Service
+Models
+Essential
+Characteristics
+Common
+Characteristics
+Software as a Service
+(SaaS)
+Platform as a Service
+(PaaS)
+Infrastructure as a
+Service (IaaS)
+Resource Pooling
+Broad Network Access Rapid Elasticity
+Measured Service
+On Demand Self-Service
+Low Cost Software
+Virtualization Service Orientation
+Advanced Security
+Homogeneity
+Massive Scale Resilient Computing
+Geographic Distribution 
+31
+Putting All Together
+? Most clouds will require very strong security
+controls
+? All models of cloud may be used for differing
+tradeoffs between threat exposure and
+efficiency
+? There is no one “cloud”
+? There are many models and architectures
+? How does one choose? 
+32
+Effects of Cloud Computing
+? Small enterprises use public SaaS and public
+clouds and minimize growth of data centers
+? Large enterprise data centers may evolve to act as
+private clouds
+? Large enterprises may use hybrid cloud
+infrastructure software to leverage both internal and
+public clouds
+? Public clouds may adopt standards in order to run
+workloads from competing hybrid cloud
+infrastructures 
+Issues of Cloud Computing
+? Privacy
+? Security
+? Legal Issue
+? Compliance
+? Availability
+? Performance
+? …
+33 
+Eg, Security Problem
+34 
+Eg, Availability Problem
+35 
+Eg, Availability Problem
+36
+APR 20, 2011, 11:56AM 
+Eg, Availability Problem
+37 
+38
+Sunny Thoughts on CC
+? Tim O'Reilly, CEO O'Reilly Media
+?
+“I think it is one of the foundations of the next
+generation of computing”
+?
+“The network of networks is the platform for all
+computing”
+“Everything we think of as a 
+computer today is really just a 
+device that connects to the big 
+computer that we are all 
+collec:vely building”
+39
+? Sun Microsystems CTO Greg Papadopoulos
+? Users will “trust” service providers with their data
+like they trust banks with their money
+?
+“Hosting providers [will] bring ?brutal efficiency'
+for utilization, power, security, service levels, and
+idea-to-deploy time” –CNET article
+? Becoming cost ineffective to build data centers
+? Organizations will rent computing resources
+Sunny Thoughts on CC 
+Criticisms on Cloud Computing
+? Richard Stallman (GNU, FSF, Emacs)
+? cloud computing was simply a trap aimed at
+forcing more people to buy into locked, proprietary
+systems that would cost them more and more
+over time
+? Larry Ellison (Oracle CEO)
+?
+“everything that we already do" and that it will
+have no effect except to "change the wording on
+some of our ads”
+40 
+41
+Case: NYT and Nasdaq (4/08)
+? New York Times
+? Didn't coordinate with Amazon, used a credit card!
+? Used EC2 and S3 to convert 15 million scanned news
+articles to PDF (4TB data)
+? Took 100 Linux computers 24 hours (would have taken
+months on NYT computers
+? Nasdaq
+? Uses S3 to deliver historic stock and fund information
+? Millions of files showing price changes of entities over 10
+minute segments
+?
+“The expenses of keeping all that data online [in Nasdaq
+servers] was too high.” – Claude Courbois, Nasdaq VP
+? Created lightweight Adobe AIR application to let users view
+data 
+42
+Case: Gov’s Use
+? President Obama'
+s Citizen's Briefing Book Based
+on Salesforce.com Ideas application
+? Concept to Live in Three Weeks
+? 134,077 Registered Users
+? 1.4 M Votes
+? 52,015 Ideas
+? Peak traffic of 149 hits per second
+? US Census Bureau Uses Salesforce.com Cloud
+Application
+? Project implemented in under 12 weeks
+? 2,500+ partnership agents use Salesforce.com for 2010 decennial
+census
+? Allows projects to scale from 200 to 2,000 users overnight to meet
+peak periods with no capital expenditure 
+Hype Cycle for CC (Gartner, 2010)
+43 
+Pros of CC
+? Lower-cost computers for end users
+? Improved performance on users’ PC
+? Lower IT infrastructure and software costs
+? Fewer maintenance issues
+? Instance software updates
+? Unlimited storage capacity
+? Increased data safety
+? Easier group collaboration
+? Universal access to data/documents
+44 
+Cons of CC
+? Requires a constant internet connection
+? Doesn’t work well with low-speed
+connections
+? Can be slower than using desktop software
+? Features might be more limited
+? Stored data might not be secure
+? If the cloud loses your data, big problem
+45 
+Who Benefits from CC?
+? Collaborators
+? Road warriors
+? Cost-conscious users
+? Cost-conscious IT departments
+? Users with increasing needs
+46 
+Who Shouldn’t be Using CC?
+? The Internet-impaired
+? Offline workers
+? The security conscious
+? Anyone married to existing applications
+? Eg, MS Office (now one can use MS Office in CC
+too)
+47 
+Using CC Services (SaaS)
+? Calendars, Schedules, & Task Management
+? Event & Contact Management
+? Email
+? Project Management
+? Word Processing, Spreadsheets, &
+Presentations
+? Databases
+? Storing & Sharing files
+? Sharing digital photographs
+? Sharing songs and videos
+48 
+Presentation Services in CC
+? Collaborating on presentations in CC
+? Web-based or Phone-based presentation app
+? Pros
+? Users from multiple locations can co-work
+? No need to carry around presentation files
+? Cost-effective—free or nominal fee !
+? Cons
+? Network access is critical
+? Don’t always have the same range of features
+? Compatibility issue with existing presentations
+49 
+Sharing Presentations in CC
+50
+? Web-based services that aim at sharing (not
+editing) existing presentation files in CC
+? Upload existing presentation files for sharing
+? Supports formats like PPT, PDF, or ODP
+? Cannot edit existing files
+? Eg,
+? AuthorStream.com
+? SlideBoom.com
+? SlideShare.net
+Database Services in CC
+? Dabbledb.com ? acquired by Twitter (2010)
+? Teamdesk.net
+? Trackvia.com
+? Baseportal.com
+? Springbase.com
+? Viravis.com
+? Infodome.com
+? Creator.zoho.com
+? Quickbase.intuit.com
+51 
+Reference
+? Cloud Computing: Web-Based Applications That
+Change the Way You Work and Collaborate
+Online, Michael Miller, Que Publishing, 2009
+? Dot.Cloud: The 21st Century Business Platform
+Built on Cloud Computing, Peter. Fingar,
+Meghan-Kiffer Press, 2009
+? Cloud Computing Tutorial, Peter Mell and Tim
+Grance, NIST, 2009
+? Many pages are adopted with the permission of the
+authors 
